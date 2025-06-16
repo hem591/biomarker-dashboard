@@ -62,6 +62,8 @@ fetch('data/sample.json')
     createChart('creatinineChart','Creatinine (mg/dL)',data.map(e => e.creatinine),'brown',0, 2, 0.6, 1.3);
     createChart('hba1cChart','HbA1c (%)',data.map(e => e.hba1c),'teal',4, 10, 4, 5.6);
     createChart('triglyceridesChart','Triglycerides (mg/dL)',data.map(e => e.triglycerides),'pink',50, 250, 50, 150);
+    console.log(data);
+
   })
  
   .catch(error => console.error('Error loading data:', error));
