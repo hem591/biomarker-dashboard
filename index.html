@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Biomarker Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f7f9fc;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .date {
+      text-align: center;
+      color: gray;
+      margin-bottom: 30px;
+    }
+
+    .chart-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    canvas {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <h1>Biomarker Trends</h1>
+  <div class="date" id="reportDate">Loading date...</div>
+
+  <div class="chart-container">
+    <canvas id="totalCholesterolChart"></canvas>
+    <canvas id="ldlChart"></canvas>
+    <canvas id="hdlChart"></canvas>
+    <canvas id="triglyceridesChart"></canvas>
+    <canvas id="creatinineChart"></canvas>
+    <canvas id="vitaminDChart"></canvas>
+    <canvas id="vitaminB12Chart"></canvas>
+    <canvas id="hba1cChart"></canvas>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
