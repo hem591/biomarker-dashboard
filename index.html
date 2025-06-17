@@ -184,7 +184,12 @@
       <div class="chart-card" id="vitaminB12Card"><h3>Vitamin B12</h3><canvas id="vitaminB12Chart"></canvas></div>
       <div class="chart-card" id="hba1cCard"><h3>HbA1c</h3><canvas id="hba1cChart"></canvas></div>
     </div>
-  </main>
+    <form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" name="report" accept=".pdf" required />
+  <button type="submit">Upload PDF Report</button>
+</form>
+<div id="uploadStatus"></div>
+   </main>
 
   <footer>
     &copy; 2025 Biomarker Visualizer | Made by Hemanth

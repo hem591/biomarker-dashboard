@@ -1,12 +1,28 @@
 // Include annotation plugin in your HTML file:
 // <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
 Chart.register(window['chartjs-plugin-annotation']);
-
 fetch('data/sample.json')
   .then(response => response.json())
   .then(data => {
     const labels = data.map(entry => entry.date);
     const entry = data[0]; // assuming single entry for simplicity
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  const res = await fetch('/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await res.json();
+  document.getElementById('uploadStatus').textContent = result.message;
+
+  if (result.success) {
+    setTimeout(() => window.location.reload(), 1000); // reload to see updated chart
+  }
+});
+
 
     document.getElementById("reportDate").textContent = `Report Date: ${labels[0]}`;
 
