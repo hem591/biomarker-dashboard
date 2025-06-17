@@ -1,5 +1,6 @@
 // Include annotation plugin in your HTML file:
 // <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+Chart.register(window['chartjs-plugin-annotation']);
 
 fetch('data/sample.json')
   .then(response => response.json())
