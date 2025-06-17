@@ -1,34 +1,40 @@
+// Include annotation plugin in your HTML file:
+// <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+
 fetch('data/sample.json')
   .then(response => response.json())
   .then(data => {
     const labels = data.map(entry => entry.date);
+    const entry = data[0]; // assuming single entry for simplicity
 
-    // Update date text
     document.getElementById("reportDate").textContent = `Report Date: ${labels[0]}`;
 
-    function createChart(canvasId, label, values, color, suggestedMin, suggestedMax, clinicalMin, clinicalMax) {
-      if (!values || values.every(v => v == null)) {
-        console.warn(`Skipping ${label} — no valid data.`);
+    function createChart(canvasId, cardId, label, value, color, suggestedMin, suggestedMax, clinicalMin, clinicalMax) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+
+      if (value == null) {
+        console.warn(`No data for ${label}`);
         return;
       }
 
-      const ctx = document.getElementById(canvasId).getContext('2d');
+      // Add alert class to card if value is outside clinical range
+      if (value < clinicalMin || value > clinicalMax) {
+        document.getElementById(cardId).classList.add('alert');
+      }
 
       new Chart(ctx, {
         type: 'line',
         data: {
-          labels: labels,
+          labels: [labels[0]],
           datasets: [{
             label: label,
-            data: values,
+            data: [value],
             borderColor: color,
             borderWidth: 2,
-            tension: 0.3,
             fill: false,
-            pointBackgroundColor: values.map(v =>
-              v < clinicalMin || v > clinicalMax ? 'red' : color
-            ),
-            pointRadius: 5
+            tension: 0.3,
+            pointBackgroundColor: value < clinicalMin || value > clinicalMax ? 'red' : color,
+            pointRadius: 6
           }]
         },
         options: {
@@ -37,6 +43,17 @@ fetch('data/sample.json')
             title: {
               display: true,
               text: `${label} Over Time`
+            },
+            annotation: {
+              annotations: {
+                range: {
+                  type: 'box',
+                  yMin: clinicalMin,
+                  yMax: clinicalMax,
+                  backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                  borderWidth: 0
+                }
+              }
             }
           },
           scales: {
@@ -49,15 +66,14 @@ fetch('data/sample.json')
       });
     }
 
-    // Call createChart for all biomarkers
-    createChart('totalCholesterolChart', 'Total Cholesterol (mg/dL)', data.map(d => d.total_cholesterol), 'blue', 100, 300, 125, 200);
-    createChart('ldlChart', 'LDL (mg/dL)', data.map(d => d.ldl), 'red', 50, 200, 0, 130);
-    createChart('hdlChart', 'HDL (mg/dL)', data.map(d => d.hdl), 'green', 20, 80, 40, 60);
-    createChart('triglyceridesChart', 'Triglycerides (mg/dL)', data.map(d => d.triglycerides), 'orange', 50, 250, 50, 150);
-    createChart('creatinineChart', 'Creatinine (mg/dL)', data.map(d => d.creatinine), 'brown', 0, 2, 0.6, 1.3);
-    createChart('vitaminDChart', 'Vitamin D (ng/mL)', data.map(d => d.vitamin_d), 'teal', 10, 80, 20, 50);
-    createChart('vitaminB12Chart', 'Vitamin B12 (pg/mL)', data.map(d => d.vitamin_b12), 'purple', 100, 1200, 200, 900);
-    createChart('hba1cChart', 'HbA1c (%)', data.map(d => d.hba1c), 'pink', 4, 10, 4, 5.6);
+    // Call chart for each biomarker
+    createChart('totalCholesterolChart', 'totalCholesterolCard', 'Total Cholesterol (mg/dL)', entry.total_cholesterol, 'blue', 100, 300, 125, 200);
+    createChart('ldlChart', 'ldlCard', 'LDL (mg/dL)', entry.ldl, 'red', 50, 200, 0, 130);
+    createChart('hdlChart', 'hdlCard', 'HDL (mg/dL)', entry.hdl, 'green', 20, 80, 40, 60);
+    createChart('triglyceridesChart', 'triglyceridesCard', 'Triglycerides (mg/dL)', entry.triglycerides, 'orange', 50, 250, 50, 150);
+    createChart('creatinineChart', 'creatinineCard', 'Creatinine (mg/dL)', entry.creatinine, 'brown', 0, 2, 0.6, 1.3);
+    createChart('vitaminDChart', 'vitaminDCard', 'Vitamin D (ng/mL)', entry.vitamin_d, 'teal', 10, 80, 20, 50);
+    createChart('vitaminB12Chart', 'vitaminB12Card', 'Vitamin B12 (pg/mL)', entry.vitamin_b12, 'purple', 100, 1200, 200, 900);
+    createChart('hba1cChart', 'hba1cCard', 'HbA1c (%)', entry.hba1c, 'pink', 4, 10, 4, 5.6);
   })
   .catch(error => console.error('Error loading JSON:', error));
-
